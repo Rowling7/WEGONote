@@ -1,0 +1,26 @@
+周报日期：2025 年 04 月 14 日-2025 年 04 月  18 日
+员工姓名：曹勇嵩
+本周工作情况
+1.维护威海市立医院，检查医保清单入组是否有错误并修正。检查医保平台是否有校验不通过数据。
+2.学习病案系统，学习病案系统操作流程，业务流程，使用对象，上报规范和时间，质控规则。
+3.市立医院DRG2人无BILL_NO数据,重新用查询HIS视图后赋值。就诊流水号：2023609970-2-001、2022950325-1-001。
+    --update t_setlinfo set bill_code='1001121209',bill_no='1001121209' where  mdtrt_sn='2022950325-1-001'
+    --update t_setlinfo set bill_code='1001119311',bill_no='1001119311' where  mdtrt_sn='2023609970-2-001'
+4.修改多个手术操作时间冲突的问题数据。
+5.威海市立医院每月对数完成
+    --初始化
+    update t_setlinfo   set  isdrg=0   where  convert(date,brjsrq,23)  between  '2025-03-01'  and  '2025-03-31';
+    --执行对数脚本
+    update a set a.isdrg=1 ,a.hi_type=b.insuranceid
+    from t_setlinfo a,( select distinct zylsh,insuranceid from  t_job_settlebillinglist where convert(date,datebill,23) between  '2025-03-01'  and  '2025-03-31' and medicalhosid =1 )  b
+    where a.mdtrt_sn=b.zylsh      ;
+    --核对结果
+    select  distinct  mdtrt_sn from   t_setlinfo  a
+    where  convert(date,brjsrq,23)  between  '2025-03-01'  and  '2025-03-31' and isdrg =1 ;
+6.深入学习DRG政策。
+
+下周工作安排
+1.运维威海市立医院DRG项目，完成每周巡检，检查Ckettle是否运行正常，数据库备份是否正常，数据入组是否有错误，对数等工作。
+2.深入学习病案系统，了解病案系统业务相关流程知识和质控规则。
+3.学习DRG政策。
+

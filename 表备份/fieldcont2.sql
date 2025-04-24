@@ -12,7 +12,7 @@
  Target Server Version : 15002000
  File Encoding         : 65001
 
- Date: 24/04/2025 08:58:31
+ Date: 24/04/2025 14:10:20
 */
 
 
@@ -24,7 +24,7 @@ IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[fi
 GO
 
 CREATE TABLE [dbo].[fieldcont2] (
-  [ID] bigint  NOT NULL,
+  [ID] int  IDENTITY(1,1) NOT NULL,
   [PARENTID] bigint  NULL,
   [ZDNAME] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL,
   [HZDNAME] varchar(255) COLLATE Chinese_PRC_CI_AS  NULL,
@@ -37,13 +37,6 @@ CREATE TABLE [dbo].[fieldcont2] (
 GO
 
 ALTER TABLE [dbo].[fieldcont2] SET (LOCK_ESCALATION = TABLE)
-GO
-
-EXEC sp_addextendedproperty
-'MS_Description', N'ID',
-'SCHEMA', N'dbo',
-'TABLE', N'fieldcont2',
-'COLUMN', N'ID'
 GO
 
 EXEC sp_addextendedproperty
@@ -106,6 +99,9 @@ GO
 -- ----------------------------
 -- Records of fieldcont2
 -- ----------------------------
+SET IDENTITY_INSERT [dbo].[fieldcont2] ON
+GO
+
 INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'1', NULL, N'hi_type', N'医保类型', NULL, NULL, NULL, N'hi_type', NULL)
 GO
 
@@ -184,11 +180,54 @@ GO
 INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'26', N'5', N'anst_way', N'麻醉方式', N'9', N'其他麻醉方法 ', NULL, NULL, NULL)
 GO
 
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'27', NULL, N'outhospitalway', N'离院方式', NULL, NULL, NULL, N'dscg_way', NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'28', N'27', N'outhospitalway', N'离院方式', N'1', N'医嘱离院', NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'29', N'27', N'outhospitalway', N'离院方式', N'2', N'医嘱转院', NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'30', N'27', N'outhospitalway', N'离院方式', N'3', N'医嘱转社区卫生服务机构/乡镇卫生院', NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'31', N'27', N'outhospitalway', N'离院方式', N'4', N'非医嘱离院', NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'32', N'27', N'outhospitalway', N'离院方式', N'5', N'死亡', NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'33', N'27', N'outhospitalway', N'离院方式', N'9', N'其他', NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'34', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'35', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'36', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+
+INSERT INTO [dbo].[fieldcont2] ([ID], [PARENTID], [ZDNAME], [HZDNAME], [ZDCODE], [HZDCODE], [TYPE], [ERRORCODE], [BZ]) VALUES (N'37', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+GO
+
+SET IDENTITY_INSERT [dbo].[fieldcont2] OFF
+GO
+
+
+-- ----------------------------
+-- Auto increment value for fieldcont2
+-- ----------------------------
+DBCC CHECKIDENT ('[dbo].[fieldcont2]', RESEED, 37)
+GO
+
 
 -- ----------------------------
 -- Primary Key structure for table fieldcont2
 -- ----------------------------
-ALTER TABLE [dbo].[fieldcont2] ADD CONSTRAINT [PK__fieldcon__3214EC2753ABF202] PRIMARY KEY CLUSTERED ([ID])
+ALTER TABLE [dbo].[fieldcont2] ADD CONSTRAINT [PK__fieldcon__3214EC278A482AF4] PRIMARY KEY CLUSTERED ([ID])
 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
 ON [PRIMARY]
 GO

@@ -12,7 +12,7 @@
  Target Server Version : 15002000
  File Encoding         : 65001
 
- Date: 24/04/2025 08:58:25
+ Date: 24/04/2025 14:10:13
 */
 
 
@@ -24,7 +24,7 @@ IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[fi
 GO
 
 CREATE TABLE [dbo].[fieldcont] (
-  [ID] bigint  NOT NULL,
+  [ID] int  IDENTITY(1,1) NOT NULL,
   [PARENTID] bigint  NULL,
   [TABLENAME] nvarchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
   [HTABLENAME] nvarchar(50) COLLATE Chinese_PRC_CI_AS  NULL,
@@ -36,13 +36,6 @@ CREATE TABLE [dbo].[fieldcont] (
 GO
 
 ALTER TABLE [dbo].[fieldcont] SET (LOCK_ESCALATION = TABLE)
-GO
-
-EXEC sp_addextendedproperty
-'MS_Description', N'ID',
-'SCHEMA', N'dbo',
-'TABLE', N'fieldcont',
-'COLUMN', N'ID'
 GO
 
 EXEC sp_addextendedproperty
@@ -98,6 +91,9 @@ GO
 -- ----------------------------
 -- Records of fieldcont
 -- ----------------------------
+SET IDENTITY_INSERT [dbo].[fieldcont] ON
+GO
+
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'1', NULL, N't_drg_result', N'入组信息', NULL, NULL, NULL, NULL)
 GO
 
@@ -167,7 +163,7 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'23', N'1', N't_drg_result', N'入组信息', N'settlepoint', N'结算点数', N'decimal(18, 8)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'24', N'1', N't_drg_result', N'入组信息', N'pointcost', N'点值 ', N'decimal(18, 8)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'24', N'1', N't_drg_result', N'入组信息', N'pointcost', N'点值', N'decimal(18, 8)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'25', N'1', N't_drg_result', N'入组信息', N'insurtype', N'医保类型', N'nvarchar(50)', NULL)
@@ -215,16 +211,16 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'39', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'mdtrt_sn', N'就医流水号', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'40', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_type', N'手术操作类别 ', N'nvarchar(10)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'40', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_type', N'手术操作类别', N'nvarchar(10)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'41', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_name', N'手术操作名称 ', N'nvarchar(500)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'41', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_name', N'手术操作名称', N'nvarchar(500)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'42', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_code', N'手术操作代码 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'42', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_code', N'手术操作代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'43', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_date', N'手术操作日期 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'43', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_date', N'手术操作日期', N'datetime2(7)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'44', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_begn_date', N'手术操作起始时间', N'datetime2(7)', NULL)
@@ -233,22 +229,22 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'45', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oprn_oprt_end_date', N'手术操作结束时间', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'46', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_way', N'麻醉方式 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'46', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_way', N'麻醉方式', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'47', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oper_dr_name', N'术者医师姓名 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'47', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oper_dr_name', N'术者医师姓名', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'48', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oper_dr_code', N'术者医师代码 ', N'nvarchar(20)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'48', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oper_dr_code', N'术者医师代码', N'nvarchar(20)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'49', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'oper_dr_code_std', N'术者标准代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'50', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_dr_name', N'麻醉医师姓名 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'50', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_dr_name', N'麻醉医师姓名', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'51', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_dr_code', N'麻醉医师代码 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'51', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_dr_code', N'麻醉医师代码', N'nvarchar(30)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'52', N'37', N't_setlinfo_oprninfo', N'结算清单手术操作信息表', N'anst_dr_code_std', N'麻醉医师标准代码', N'nvarchar(30)', NULL)
@@ -275,7 +271,7 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'59', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'mdtrt_sn', N'就诊流水号', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'60', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'fixmedins_name', N'定点医药机构名称 ', N'nvarchar(200)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'60', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'fixmedins_name', N'定点医药机构名称', N'nvarchar(200)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'61', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'fixmedins_code', N'定点医药机构编码', N'nvarchar(12)', NULL)
@@ -284,46 +280,46 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'62', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_setl_lv', N'医保结算等级', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'63', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_no', N'医保编号 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'63', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_no', N'医保编号', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'64', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'medcasno', N'病案号 ', N'nvarchar(40)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'64', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'medcasno', N'病案号', N'nvarchar(40)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'65', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dcla_time', N'申报时间 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'65', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dcla_time', N'申报时间', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'66', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_name', N'人员姓名 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'66', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_name', N'人员姓名', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'67', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'gend', N'性别 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'67', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'gend', N'性别', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'68', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'brdy', N'出生日期 ', N'nvarchar(10)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'68', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'brdy', N'出生日期', N'nvarchar(10)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'69', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'age', N'年龄 ', N'decimal(4, 1)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'69', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'age', N'年龄', N'decimal(4, 1)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'70', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'ntly', N'国籍 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'70', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'ntly', N'国籍', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'71', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_age', N'（年龄不足 1 周岁）年龄 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'71', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_age', N'（年龄不足 1 周岁）年龄', N'int', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'72', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'naty', N'民族', N'nvarchar(12)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'73', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'patn_cert_type', N'患者证件类别 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'73', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'patn_cert_type', N'患者证件类别', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'74', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'certno', N'证件号码 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'74', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'certno', N'证件号码', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'75', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'prfs', N'职业 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'75', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'prfs', N'职业', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'76', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'curr_addr', N'现住址 ', N'nvarchar(200)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'76', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'curr_addr', N'现住址', N'nvarchar(200)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'77', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'curr_addr_provcode', N'现住址_省代码', N'nvarchar(6)', NULL)
@@ -335,70 +331,70 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'79', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'curr_addr_cotycode', N'现住址_县区代码', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'80', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'emp_name', N'单位名称 ', N'nvarchar(200)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'80', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'emp_name', N'单位名称', N'nvarchar(200)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'81', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'emp_addr', N'单位地址 ', N'nvarchar(200)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'81', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'emp_addr', N'单位地址', N'nvarchar(200)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'82', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'emp_tel', N'单位电话 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'82', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'emp_tel', N'单位电话', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'83', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'poscode', N'邮编 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'83', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'poscode', N'邮编', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'84', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'coner_name', N'联系人姓名 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'84', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'coner_name', N'联系人姓名', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'85', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'patn_rlts', N'与患者关系 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'85', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'patn_rlts', N'与患者关系', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'86', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'coner_addr', N'联系人地址 ', N'nvarchar(200)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'86', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'coner_addr', N'联系人地址', N'nvarchar(200)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'87', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'coner_tel', N'联系人电话 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'87', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'coner_tel', N'联系人电话', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'88', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_type', N'医保类型 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'88', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_type', N'医保类型', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'89', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'insuplc', N'参保地 ', N'nvarchar(8)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'89', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'insuplc', N'参保地', N'nvarchar(8)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'90', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'sp_psn_type', N'特殊人员类型 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'90', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'sp_psn_type', N'特殊人员类型', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'91', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_adm_type', N'新生儿入院类型 ', N'nvarchar(10)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'91', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_adm_type', N'新生儿入院类型', N'nvarchar(10)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'92', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_bir_wt', N'新生儿出生体重 ', N'decimal(7, 2)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'92', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_bir_wt', N'新生儿出生体重', N'decimal(7, 2)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'93', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_adm_wt', N'新生儿入院体重 ', N'decimal(7, 2)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'93', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'nwb_adm_wt', N'新生儿入院体重', N'decimal(7, 2)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'94', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'opsp_diag_caty', N'门诊慢特病诊断科别 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'94', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'opsp_diag_caty', N'门诊慢特病诊断科别', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'95', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'opsp_mdtrt_date', N'门诊慢特病就诊日期 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'95', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'opsp_mdtrt_date', N'门诊慢特病就诊日期', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'96', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'ipt_med_type', N'住院医疗类型 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'96', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'ipt_med_type', N'住院医疗类型', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'97', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'adm_way', N'入院途径 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'97', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'adm_way', N'入院途径', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'98', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'trt_type', N'治疗类别 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'98', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'trt_type', N'治疗类别', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'99', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'adm_time', N'入院时间 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'99', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'adm_time', N'入院时间', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'100', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'adm_caty', N'入院科别 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'100', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'adm_caty', N'入院科别', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'101', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'refldept_dept', N'转科科别 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'101', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'refldept_dept', N'转科科别', N'nvarchar(50)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'102', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'refldept_dept1', N'转科科别1', N'nvarchar(6)', NULL)
@@ -416,16 +412,16 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'106', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'refldept_dept5', N'转科科别5', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'107', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dscg_time', N'出院时间 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'107', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dscg_time', N'出院时间', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'108', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dscg_caty', N'出院科别 ', N'nvarchar(6)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'108', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dscg_caty', N'出院科别', N'nvarchar(6)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'109', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'act_ipt_days', N'实际住院天数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'109', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'act_ipt_days', N'实际住院天数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'110', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'otp_wm_dise', N'门（急）诊西医诊断 ', N'nvarchar(200)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'110', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'otp_wm_dise', N'门（急）诊西医诊断', N'nvarchar(200)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'111', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'wm_dise_code', N'西医诊断疾病代码', N'nvarchar(20)', NULL)
@@ -437,121 +433,121 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'113', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'tcm_dise_code', N'中医诊断代码', N'nvarchar(20)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'114', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'diag_code_cnt', N'诊断代码计数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'114', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'diag_code_cnt', N'诊断代码计数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'115', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'oprn_oprt_code_cnt', N'手术操作代码计数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'115', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'oprn_oprt_code_cnt', N'手术操作代码计数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'116', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'vent_used_dura', N'呼吸机使用时长 ', N'nvarchar(10)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'116', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'vent_used_dura', N'呼吸机使用时长', N'nvarchar(10)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'117', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'pwcry_bfadm_coma_dura', N'颅脑损伤患者入院前昏迷时长 ', N'nvarchar(10)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'117', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'pwcry_bfadm_coma_dura', N'颅脑损伤患者入院前昏迷时长', N'nvarchar(10)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'118', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'pwcry_afadm_coma_dura', N'颅脑损伤患者入院后昏迷时长 ', N'nvarchar(10)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'118', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'pwcry_afadm_coma_dura', N'颅脑损伤患者入院后昏迷时长', N'nvarchar(10)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'119', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bld_cat', N'输血品种 ', N'nvarchar(256)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'119', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bld_cat', N'输血品种', N'nvarchar(256)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'120', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bld_amt', N'输血量 ', N'nvarchar(256)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'120', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bld_amt', N'输血量', N'nvarchar(256)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'121', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bld_unt', N'输血计量单位 ', N'nvarchar(256)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'121', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bld_unt', N'输血计量单位', N'nvarchar(256)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'122', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'spga_nurscare_days', N'特级护理天数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'122', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'spga_nurscare_days', N'特级护理天数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'123', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'lv1_nurscare_days', N'一级护理天数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'123', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'lv1_nurscare_days', N'一级护理天数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'124', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'scd_nurscare_days', N'二级护理天数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'124', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'scd_nurscare_days', N'二级护理天数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'125', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'lv3_nurscare_days', N'三级护理天数 ', N'int', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'125', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'lv3_nurscare_days', N'三级护理天数', N'int', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'126', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dscg_way', N'离院方式 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'126', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'dscg_way', N'离院方式', N'nvarchar(3)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'127', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'acp_medins_name', N'拟接收机构名称 ', N'nvarchar(100)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'127', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'acp_medins_name', N'拟接收机构名称', N'nvarchar(100)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'128', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'acp_optins_code', N'拟接收机构代码 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'128', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'acp_optins_code', N'拟接收机构代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'129', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bill_code', N'票据代码 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'129', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bill_code', N'票据代码', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'130', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bill_no', N'票据号码 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'130', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'bill_no', N'票据号码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'131', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'biz_sn', N'业务流水号 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'131', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'biz_sn', N'业务流水号', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'132', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'days_rinp_flag_31', N'出院 31 天内再住院计划标志 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'132', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'days_rinp_flag_31', N'出院 31 天内再住院计划标志', N'nvarchar(3)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'133', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'days_rinp_pup_31', N'出院 31 天内再住院目的', N'nvarchar(200)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'134', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'chfpdr_name', N'主诊医师姓名 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'134', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'chfpdr_name', N'主诊医师姓名', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'135', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'chfpdr_code', N'主诊医师代码 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'135', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'chfpdr_code', N'主诊医师代码', N'nvarchar(30)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'136', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'chfpdr_code_std', N'主诊医师标准代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'137', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'resp_nurs_code', N'责任护士代码 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'137', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'resp_nurs_code', N'责任护士代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'138', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'resp_nurs_name', N'责任护士姓名 ', N'nvarchar(30)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'138', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'resp_nurs_name', N'责任护士姓名', N'nvarchar(30)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'139', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'resp_nurs_code_std', N'责任护士标准代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'140', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'setl_begn_date', N'结算开始日期 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'140', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'setl_begn_date', N'结算开始日期', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'141', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'setl_end_date', N'结算结束日期 ', N'datetime2(7)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'141', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'setl_end_date', N'结算结束日期', N'datetime2(7)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'142', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_selfpay', N'个人自付 ', N'decimal(16, 2)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'142', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_selfpay', N'个人自付', N'decimal(16, 2)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'143', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_ownpay', N'个人自费 ', N'decimal(16, 2)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'143', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_ownpay', N'个人自费', N'decimal(16, 2)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'144', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'acct_pay', N'个人账户支出 ', N'decimal(16, 2)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'144', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'acct_pay', N'个人账户支出', N'decimal(16, 2)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'145', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_cashpay', N'个人现金支付 ', N'decimal(16, 2)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'145', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'psn_cashpay', N'个人现金支付', N'decimal(16, 2)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'146', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_paymtd', N'医保支付方式 ', N'nvarchar(3)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'146', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hi_paymtd', N'医保支付方式', N'nvarchar(3)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'147', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hsorg_code', N'医保机构代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'148', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hsorg', N'医保机构 ', N'nvarchar(100)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'148', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hsorg', N'医保机构', N'nvarchar(100)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'149', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hsorg_opter_code', N'医保机构机构经办人代码', N'nvarchar(30)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'150', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hsorg_opter', N'医保机构经办人 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'150', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'hsorg_opter', N'医保机构经办人', N'nvarchar(50)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'151', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'medins_fill_dept', N'医药机构填报部门 ', N'nvarchar(100)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'151', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'medins_fill_dept', N'医药机构填报部门', N'nvarchar(100)', NULL)
 GO
 
-INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'152', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'medins_fill_psn', N'医药机构填报人 ', N'nvarchar(50)', NULL)
+INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'152', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'medins_fill_psn', N'医药机构填报人', N'nvarchar(50)', NULL)
 GO
 
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'153', N'57', N't_setlinfo', N'结算清单患者基本信息表', N'setl_list_id', N'上传id（系统生成）', N'nvarchar(100)', NULL)
@@ -4172,11 +4168,21 @@ GO
 INSERT INTO [dbo].[fieldcont] ([ID], [PARENTID], [TABLENAME], [HTABLENAME], [ZDCODE], [HZDCODE], [TYPE], [BZ]) VALUES (N'1358', NULL, NULL, NULL, NULL, NULL, NULL, NULL)
 GO
 
+SET IDENTITY_INSERT [dbo].[fieldcont] OFF
+GO
+
+
+-- ----------------------------
+-- Auto increment value for fieldcont
+-- ----------------------------
+DBCC CHECKIDENT ('[dbo].[fieldcont]', RESEED, 1358)
+GO
+
 
 -- ----------------------------
 -- Primary Key structure for table fieldcont
 -- ----------------------------
-ALTER TABLE [dbo].[fieldcont] ADD CONSTRAINT [PK__fieldcon__3214EC2772BDDB0A] PRIMARY KEY CLUSTERED ([ID])
+ALTER TABLE [dbo].[fieldcont] ADD CONSTRAINT [PK__fieldcon__3214EC27149112EF] PRIMARY KEY CLUSTERED ([ID])
 WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
 ON [PRIMARY]
 GO

@@ -1,81 +1,94 @@
-## 前期工作
-
-#### 1.在离线系统中导入镜像并验证
+ 1.在离线系统中导入镜像并验证
 
     传输文件命令格式：
     scp D:\Docker\images\install-docker-offline.sh root@192.168.10.154:/root
 
-#### 2.将 `.tar` 文件拷贝到 Rocky 9.5 上，后执行：    加载 .net8 sql2022 mssqltools
+ 2.将 `.tar` 文件拷贝到 Rocky 9.5 上，后执行：    加载 .net8 sql2022 mssqltools
 
     docker load -i dotnet8.tar
     docker load -i mssql2022.tar
     docker load -i mssql-tools.tar
     (删除所有未被容器使用的镜像:   docker image prune -a)
 
-#### 3.验证是否成功导入
-    docker images  
+ 3.验证是否成功导入
+    docker images
 
-## Docker
-
-#### 4.创建mynet
+ 4.创建mynet
     docker network create mynet
 
-#### 5.启动 SQL Server 容器,运行容器时加入这个网络(以下一次性全部输入)：
-    docker run -d --name sql2022 --network mynet 
-      -e "ACCEPT_EULA=Y" 
-      -e "SA_PASSWORD=password81!" 
-      -p 1433:1433 
+ 5.启动 SQL Server 容器,运行容器时加入这个网络(以下一次性全部输入)：
+    docker run -d --name sql2022 --network mynet
+      -e "ACCEPT_EULA=Y"
+      -e "SA_PASSWORD=password81!"
+      -p 1433:1433
       mcr.microsoft.com/mssql/server:2022-latest
 
-#### 6.运行命令查看容器（二选一）
+6.运行命令查看容器（二选一）
     docker ps     #查看运行中的容器
     docker ps -a  #查看所有容器
 
-#### 7.进入var文件夹，创建www文件夹
+7.进入var文件夹，创建www文件夹
     cd /var --进入var文件夹
     mkdir www --创建www文件夹
     cd www  --进入www文件夹
 
-#### 8.*重要：Dockerfile和publish.tar放在www文件夹下*
+8.*重要：Dockerfile和publish.tar放在www文件夹下*
     mv Dockerfile /var/www/
     mv publish.tar /var/www/
-#### 9. 解压publish文件夹
-    tar -xvf publish.tar 
+9. 解压publish文件夹
+    tar -xvf publish.tar
 
-#### 10. www下构建publish镜像（wego-admin-app 空格 . 点也要输入）
+10. www下构建publish镜像（wego-admin-app 空格 . 点也要输入）
     docker build -t wego-admin-app .
 
-#### 11. 运行publish容器，映射端口，挂载mynet容器网络(以下一次性全部输入)：
-    docker run -d --name wego-admin --network mynet 
-      -p 5000:5000 
-      wego-admin-app 
+11. 运行publish容器，映射端口，挂载mynet容器网络(以下一次性全部输入)：
+    docker run -d --name wego-admin --network mynet
+      -p 5000:5000
+      wego-admin-app
 
-#### 12.查看日志
+12.查看日志
     docker logs wego-admin
 
-#### 13.永久开启端口（例如开启 TCP 端口 1433、5000）
+13.永久开启端口（例如开启 TCP 端口 1433、5000）
     firewall-cmd --permanent --add-port=1433/tcp
     firewall-cmd --permanent --add-port=5000/tcp
 
-#### 14.重载防火墙以使配置生效
+14.重载防火墙以使配置生效
     firewall-cmd --reload
 
-#### 15.sqlcmd
-    sqlcmd docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
-	查看sql-tools 目录
+15.sqlcmd
+    docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
+
+    查看sql-tools 目录
 	docker exec -it <容器名称或ID> ls /opt/
 		/opt/mssql-tools18/bin/
-## 其他：
+
+
+其他：
 1.修改数据库密码，需要先修改配置文件appsettings.json中的sql密码,再进行docker的第5步.
-2.container 被占用或者重名，删除所有未被容器：       
-    --先停止wego-admin 
-    docker stop wego-admin 
+2.container 被占用或者重名，删除所有未被容器：
+    --先停止wego-admin
+    docker stop wego-admin
     --移除wego-admin
-    docker rm wego-admin  
+    docker rm wego-admin
 
     强制删除所有未被容器:
     docker rm -f wego-admin
-	
+
 3.启动容器
 	docker start [容器名]
-	
+    docker stop [容器名]
+
+4. 恢复数据库过程中可能遇到的问题
+    4.1Cannot open backup device '/var/sqlbak/WEGO_R.bak'. Operating system error 2(The system cannot find the file specified.). (3201)
+    直接复制文件进容器中：docker cp /var/sqlbak/WEGO_R.bak [容器名或ID]:/opt/mssql/
+        验证是否复制成功:docker exec -it [容器名或ID] ls /opt/mssql/
+
+    4.2The operating system returned the error '5(Access is denied.)' while attempting 'RestoreContainer::ValidateTargetForCreation' on '/opt/mssql/data/WEGO_Rehabilitation_Admin.mdf'. (3634)
+    查看文件夹权限：docker exec -it [容器名] ls -ld /opt/mssql/data
+    修改权限：docker exec -it [容器名] chown -R mssql:mssql /opt/mssql/data
+            docker exec -it [容器名] chmod -R 755 /opt/mssql/data
+
+    4.docker 容器中创建目录：docker exec -it -u 0 sql2022 mkdir -p /opt/mssql/data
+        修改权限：docker exec -it -u 0 sql2022 chown -R mssql:mssql /opt/mssql/data
+                    docker exec -it -u 0 sql2022 chmod 755 /opt/mssql/data

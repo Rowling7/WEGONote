@@ -55,7 +55,8 @@
 
 14.重载防火墙以使配置生效
     firewall-cmd --reload
-
+    展示端口状况
+    firewall-cmd --zone=public --list-ports
 15.sqlcmd
     docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
 
@@ -92,3 +93,46 @@
     4.docker 容器中创建目录：docker exec -it -u 0 sql2022 mkdir -p /opt/mssql/data
         修改权限：docker exec -it -u 0 sql2022 chown -R mssql:mssql /opt/mssql/data
                     docker exec -it -u 0 sql2022 chmod 755 /opt/mssql/data
+5.使用 lsblk 查看块设备与分区树状结构
+
+6.安装dockers
+
+        # 添加Docker Repo
+        [root@localhost ~]# dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+        # 更新源
+        [root@localhost ~]# dnf update
+
+        # 在安装 Docker CE 的时候，会同步安装 docker-compose-plugin 插件
+        [root@localhost ~]# dnf install -y docker-ce
+
+7.遇到 Cannot connect to the Docker daemon 错误时，通常是由于 Docker 服务未运行或用户权限不足导致。以下是分步排查与解决方法：
+
+        1. 检查 Docker 服务状态
+        启动 Docker 服务
+        若服务未运行，执行以下命令：
+
+        bash
+        sudo systemctl start docker         # 启动服务
+        sudo systemctl enable docker        # 设置开机自启
+        sudo systemctl status docker        # 确认状态是否为 "active (running)"
+        若状态显示 inactive，需进一步排查服务启动失败的原因（如依赖缺失或配置错误）。
+
+        重启 Docker 服务
+        若服务已运行但异常，尝试重启：
+
+        bash
+        sudo systemctl restart docker
+        2. 检查用户权限
+        将用户加入 docker 组
+        Docker 默认要求用户属于 docker 组才能访问 /var/run/docker.sock。执行：
+
+        bash
+        sudo usermod -aG docker $USER   # 添加当前用户到 docker 组
+        newgrp docker                   # 刷新组权限（或重新登录）
+        完成后验证：
+
+        bash
+        groups                          # 查看用户所属组是否包含 "docker"
+        临时使用 sudo 测试
+        若 docker ps 配合 sudo 可执行成功，则表明权限问题，需按上述步骤修复。

@@ -2,26 +2,37 @@
 
     传输文件命令格式：
     scp D:\Docker\images\install-docker-offline.sh root@192.168.10.154:/root
+    传输文件夹格式：
+    scp  -r "d:/CommonFiles/Datafiles" root@192.168.46.131:/var/www
 
  2.将 `.tar` 文件拷贝到 Rocky 9.5 上，后执行：    加载 .net8 sql2022 mssqltools
 
-    docker load -i dotnet8.tar
+    docker load -i dotnet8.tar   //加载完整 dotnet8 镜像的核心目的是为应用提供标准化的运行时环境。使用 docker image prune -a会清理掉.net
     docker load -i mssql2022.tar
-    docker load -i mssql-tools.tar
-    (删除所有未被容器使用的镜像:   docker image prune -a)
+    docker load -i mssql-tools.tar //使用 docker image prune -a会清理掉.net
+    (删除所有未被容器使用的镜像:   docker image prune -a  |！不要用！)
 
  3.验证是否成功导入
     docker images
+
+        REPOSITORY                        TAG           IMAGE ID       CREATED       SIZE
+        wego-admin                        latest        91ac202ab8c7   4 hours ago   402MB
+        mcr.microsoft.com/dotnet/aspnet   8.0           199d88fafb08   12 days ago   218MB
+        mcr.microsoft.com/mssql/server    2022-latest   140595692e82   4 weeks ago   1.63GB
+        mcr.microsoft.com/mssql-tools     latest        bc2b6cd40cb9   7 years ago   218MB
 
  4.创建mynet
     docker network create mynet
 
  5.启动 SQL Server 容器,运行容器时加入这个网络(以下一次性全部输入)：
-    docker run -d --name sql2022 --network mynet
-      -e "ACCEPT_EULA=Y"
-      -e "SA_PASSWORD=password81!"
-      -p 1433:1433
-      mcr.microsoft.com/mssql/server:2022-latest
+docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
+
+启动 SQL Server 容器：
+docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v sql_data:/var/opt/mssql mcr.microsoft.com/mssql/server:2022-latest
+
+--docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /opt/mssql/data:/var/opt/mssql/data  -v /opt/mssql/log:/var/opt/mssql/log   mcr.microsoft.com/mssql/server:2022-latest
+
+
 
 6.运行命令查看容器（二选一）
     docker ps     #查看运行中的容器
@@ -42,9 +53,7 @@
     docker build -t wego-admin-app .
 
 11. 运行publish容器，映射端口，挂载mynet容器网络(以下一次性全部输入)：
-    docker run -d --name wego-admin --network mynet
-      -p 5000:5000
-      wego-admin-app
+    docker run -d --name wego-admin --network mynet -p 5000:5000  wego-admin-app
 
 12.查看日志
     docker logs wego-admin
@@ -58,12 +67,23 @@
     展示端口状况
     firewall-cmd --zone=public --list-ports
 15.sqlcmd
+
+    docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools18/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
     docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
 
     查看sql-tools 目录
 	docker exec -it <容器名称或ID> ls /opt/
 		/opt/mssql-tools18/bin/
 
+
+docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
+1> RESTORE DATABASE WEGO_Rehabilitation_Admin
+2> FROM DISK ='/opt/mssql/WEGO_Rehabilitation_Admin.BAK'
+3> WITH
+4> MOVE 'WEGO_Rehabilitation_Admin' TO '/opt/mssql/data/WEGO_Rehabilitation_Admin.mdf',
+5> MOVE 'WEGO_Rehabilitation_Admin_log' TO '/opt/mssql/data/WEGO_Rehabilitation_Admin_log.ldf',
+6> REPLACE, stats=5;
+8> go
 
 其他：
 1.修改数据库密码，需要先修改配置文件appsettings.json中的sql密码,再进行docker的第5步.
@@ -83,12 +103,15 @@
 4. 恢复数据库过程中可能遇到的问题
     4.1Cannot open backup device '/var/sqlbak/WEGO_R.bak'. Operating system error 2(The system cannot find the file specified.). (3201)
     直接复制文件进容器中：docker cp /var/sqlbak/WEGO_R.bak [容器名或ID]:/opt/mssql/
-        验证是否复制成功:docker exec -it [容器名或ID] ls /opt/mssql/
+        验证是否复制成功:docker exec -it sql2022 ls /opt/mssql/
+            docker cp /var/www/Datafiles/WEGO_Rehabilitation_Admin.bak sql2022:/opt/mssql/
+
+
 
     4.2The operating system returned the error '5(Access is denied.)' while attempting 'RestoreContainer::ValidateTargetForCreation' on '/opt/mssql/data/WEGO_Rehabilitation_Admin.mdf'. (3634)
     查看文件夹权限：docker exec -it [容器名] ls -ld /opt/mssql/data
-    修改权限：docker exec -it [容器名] chown -R mssql:mssql /opt/mssql/data
-            docker exec -it [容器名] chmod -R 755 /opt/mssql/data
+    修改权限：docker exec -it sql2022 chown -R mssql:mssql /opt/mssql/data
+            docker exec -it sql2022 chmod -R 755 /opt/mssql/data
 
     4.docker 容器中创建目录：docker exec -it -u 0 sql2022 mkdir -p /opt/mssql/data
         修改权限：docker exec -it -u 0 sql2022 chown -R mssql:mssql /opt/mssql/data

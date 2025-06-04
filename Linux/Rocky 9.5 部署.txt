@@ -17,7 +17,7 @@
     1.5 重启 Docker 服务
         sudo systemctl restart docker
 其他：
-    1.6 将用户加入 docker 组：
+    (可选)1.6 将用户加入 docker 组：
         sudo usermod -aG docker $USER   # 添加当前用户到 docker 组
         newgrp docker                   # 刷新组权限（或重新登录）
         groups                          # 查看用户所属组是否包含 "docker"
@@ -36,13 +36,16 @@
         docker load -i mssql2022.tar    #加载mssql2022镜像
         docker load -i mssql-tools.tar  #加载mssql-tools镜像
         其他：
-        docker image prune -a #删除所有未使用的镜像 !尽可能不用
+            docker image prune -a #删除所有未使用的镜像 !尽可能不用
     5.2验证镜像
         docker images #查看镜像
             REPOSITORY  TAG     IMAGE ID        CREATED         SIZE       #镜像信息
             wego-admin  latest  91ac202ab8c7    4 hours ago     402MB
 6.创建网络端口映射 mynet
     docker network create mynet     #创建网络名称 mynet
+其他：
+    移除网络端口映射 mynet
+    docker network rm mynet
 7.启动 SQL Server 容器并映射端口 1433，并挂载数据卷 /var/www/mssql:/var/opt/mssql/data
     docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /var/www/mssql:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2022-latest
 (可选)8.启动 dotnet 容器并映射端口 80，并挂载数据卷 /var/www/dotnet:/app
@@ -73,7 +76,7 @@
         9.8.2移除容器
             docker rm wego-admin
         强制删除容器
-            ddocker rm -f wego-admin
+            docker rm -f wego-admin
 10. 永久开启端口(例如开启 TCP 端口 1433、5000)
     firewall-cmd --permanent --add-port=1433/tcp #  添加1433端口
     firewall-cmd --permanent --add-port=5000/tcp #  添加5000端口
@@ -84,9 +87,9 @@
     (可选)12.1 查看sql-tools 目录
         docker exec -it <容器名称或ID> ls /opt/
         docker exec -it sql2022 ls /opt/
-		    /opt/mssql-tools18/bin/
+		    /opt/mssql-tools/bin/
     12.2  恢复数据库
-        docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools18/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
+        docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
         sql脚本：
             1> RESTORE DATABASE WEGO_Rehabilitation_Admin
             2> FROM DISK ='/opt/mssql/WEGO_Rehabilitation_Admin.BAK'
@@ -100,7 +103,7 @@
         1.容器中创建目录(如果没有)
             docker exec -it -u 0 sql2022 mkdir -p /opt/mssql/data
         2.检查文件是否存在
-            docker cp /var/www/WEGO_Rehabilitation.bak sql2022:/opt/mssql/      #将文件复制到容器中
+            docker cp /var/www/WEGO_Rehabilitation_Admin.BAK sql2022:/opt/mssql/      #将文件复制到容器中
         3.验证是否复制成功
                 docker exec -it sql2022 ls -l /opt/mssql/
     12.4The operating system returned the error '5(Access is denied.)' while attempting 'RestoreContainer::ValidateTargetForCreation' on '/opt/mssql/data/WEGO_Rehabilitation_Admin.mdf'. (3634)

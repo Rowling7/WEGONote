@@ -30,8 +30,7 @@ docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=
 启动 SQL Server 容器：
 docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v sql_data:/var/opt/mssql mcr.microsoft.com/mssql/server:2022-latest
 
---docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /opt/mssql/data:/var/opt/mssql/data  -v /opt/mssql/log:/var/opt/mssql/log   mcr.microsoft.com/mssql/server:2022-latest
-
+docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /opt/mssql/data:/var/opt/mssql/data -v /opt/mssql/log:/var/opt/mssql/log mcr.microsoft.com/mssql/server:2022-latest
 
 
 6.运行命令查看容器（二选一）
@@ -85,6 +84,10 @@ docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-too
 6> REPLACE, stats=5;
 8> go
 
+
+docker exec -it sql2022 bash -c "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password81!" -i /opt/mssql/restore_wegodb.sql"
+
+
 其他：
 1.修改数据库密码，需要先修改配置文件appsettings.json中的sql密码,再进行docker的第5步.
 2.container 被占用或者重名，删除所有未被容器：
@@ -112,6 +115,9 @@ docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-too
     查看文件夹权限：docker exec -it [容器名] ls -ld /opt/mssql/data
     修改权限：docker exec -it sql2022 chown -R mssql:mssql /opt/mssql/data
             docker exec -it sql2022 chmod -R 755 /opt/mssql/data
+
+以 root 用户执行命令:
+docker exec -it -u root sql2022 chown -R mssql:mssql /opt/mssql/data
 
     4.docker 容器中创建目录：docker exec -it -u 0 sql2022 mkdir -p /opt/mssql/data
         修改权限：docker exec -it -u 0 sql2022 chown -R mssql:mssql /opt/mssql/data
@@ -159,3 +165,7 @@ docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-too
         groups                          # 查看用户所属组是否包含 "docker"
         临时使用 sudo 测试
         若 docker ps 配合 sudo 可执行成功，则表明权限问题，需按上述步骤修复。
+
+8.安装 unzip
+sudo dnf install unzip -y
+解压 zip 文件命令：unzip your_file.zip

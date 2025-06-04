@@ -23,7 +23,8 @@
         groups                          # 查看用户所属组是否包含 "docker"
 2.安装unzip
     sudo dnf install unzip -y
-    (解压 zip 文件命令：unzip file_name.zip)
+    解压 zip 文件:
+    unzip file_name.zip
 3.创建目录
     cd /var     #进入 /var 目录
     mkdir www   #创建 www 目录
@@ -114,4 +115,15 @@
         docker exec -it -u 0 sql2022 chmod 777 /opt/mssql/data
             drwxrwxrwx. 2 mssql mssql 84 Jun  4 01:58 /opt/mssql/data
 13.测试web
-    http://192.168.1.100:5000/
+
+-----------------------
+14.其他未验证
+    14.1配置 Docker 存储路径（可选）
+        sudo mkdir -p /root/docker
+    14.2修改 Docker 配置文件 daemon.json
+        {
+        "data-root": "/mnt/docker"
+        }
+    14.3重启 Docker 服务
+        sudo systemctl restart docker
+

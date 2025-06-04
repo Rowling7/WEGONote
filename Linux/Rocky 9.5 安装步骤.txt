@@ -1,0 +1,75 @@
+0.使用 lsblk 查看块设备与分区树状结构，安装在容量大的磁盘上
+1.安装docker
+    1.1 添加源
+        dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+    1.2 更新源
+        dnf update
+    1.3 安装docker (同步安装 docker-compose-plugin 插件)
+        dnf install -y docker-ce
+    1.4 启动docker
+        sudo systemctl start docker         # 启动服务
+        sudo systemctl enable docker        # 设置开机自启
+        sudo systemctl status docker        # 确认状态是否为 "active (running)"
+2.安装unzip
+    sudo dnf install unzip -y
+    解压 zip 文件:
+    unzip file_name.zip
+3.创建目录
+    cd /var     #进入 /var 目录
+    mkdir www   #创建 www 目录
+4.传输项目所需文件
+    scp D:\dotnet8.tar root@192.168.10.154:/root          #传输单个文件，或者/var/www
+    scp  -r "D:/linux" root@192.168.46.131:/var/www     #传输文件夹，或者/root
+5.docker 加载验证镜像
+    5.1加载镜像
+        docker load -i dotnet8.tar      #加载dotnet8镜像
+        docker load -i mssql2022.tar    #加载mssql2022镜像
+        docker load -i mssql-tools.tar  #加载mssql-tools镜像
+6.创建网络端口映射 mynet
+    docker network create mynet     #创建网络名称 mynet
+7.启动 SQL Server 容器并映射端口 1433，并挂载数据卷 /var/www/mssql:/var/opt/mssql/data
+    docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /var/www/mssql:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2022-latest
+8.构建publish镜像
+    8.1 进入项目目录
+        cd /var/www
+    8.2 移动publish文件和Dockerfile文件到www目录下
+        mv Dockerfile /var/www/
+        mv publish.tar /var/www/
+    8.3 解压publish文件夹
+        tar -xvf publish.tar
+    8.4 构建镜像(wego-admin-app 空格 . 点也要输入)
+        docker build -t wego-admin-app .
+    8.5 运行容器
+        docker run -d --name wego-admin --network mynet -p 5000:5000 wego-admin-app
+    8.6 验证容器 /查看日志
+        docker ps -a                #  查看容器
+        docker logs -f wego-admin   #  查看日志
+    8.7 启动容器
+        docker start wego-admin     #  启动容器
+        docker restart wego-admin   #  重启容器
+        docker stop wego-admin      #  停止容器
+其他：
+    8.8 容器被占用或者重名，删除所有未被容器
+        8.8.1停止容器
+            docker stop wego-admin
+        8.8.2移除容器
+            docker rm wego-admin
+		强制删除容器
+            docker rm -f wego-admin
+9. 开启端口(例如开启 TCP 端口 1433、5000)
+    firewall-cmd --permanent --add-port=1433/tcp
+    firewall-cmd --permanent --add-port=5000/tcp
+10. 重载防火墙使配置生效
+    firewall-cmd --reload
+    firewall-cmd --zone=public --list-ports
+11. 恢复数据库
+	docker run -it --rm --network mynet mcr.microsoft.com/mssql-tools /opt/mssql-tools/bin/sqlcmd -S sql2022 -U sa -P 'password81!'
+	sql脚本示例：
+		1> RESTORE DATABASE WEGO_Rehabilitation_Admin
+		2> FROM DISK ='/opt/mssql/WEGO_Rehabilitation_Admin.BAK'
+		3> WITH
+		4> MOVE 'WEGO_Rehabilitation_Admin' TO '/opt/mssql/data/WEGO_Rehabilitation_Admin.mdf',
+		5> MOVE 'WEGO_Rehabilitation_Admin_log' TO '/opt/mssql/data/WEGO_Rehabilitation_Admin_log.ldf',
+		
+		6> REPLACE, stats=5;
+		8> go

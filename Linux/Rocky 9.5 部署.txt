@@ -26,24 +26,24 @@
     解压 zip 文件:
     unzip file_name.zip
 3.创建目录
-    cd /var     #进入 /var 目录
-    mkdir www   #创建 www 目录
+    cd /var     #   进入 /var 目录
+    mkdir www   #   创建 www 目录
 4.传输项目所需文件
-    scp D:\dotnet8.tar root@192.168.10.154:/root          #传输单个文件，或者/var/www
-    scp  -r "D:/linux" root@192.168.46.131:/var/www     #传输文件夹，或者/root
+    scp D:\dotnet8.tar root@192.168.10.154:/root        #   传输单个文件，或者/var/www
+    scp  -r "D:/linux" root@192.168.46.131:/var/www     #   传输文件夹，或者/root
 5.docker 加载验证镜像
     5.1加载镜像
-        docker load -i dotnet8.tar      #加载dotnet8镜像
-        docker load -i mssql2022.tar    #加载mssql2022镜像
-        docker load -i mssql-tools.tar  #加载mssql-tools镜像
+        docker load -i dotnet8.tar      #   加载dotnet8镜像
+        docker load -i mssql2022.tar    #   加载mssql2022镜像
+        docker load -i mssql-tools.tar  #   加载mssql-tools镜像
         其他：
-            docker image prune -a #删除所有未使用的镜像 !尽可能不用
+            docker image prune -a   #   删除所有未使用的镜像 !尽可能不用
     5.2验证镜像
-        docker images #查看镜像
-            REPOSITORY  TAG     IMAGE ID        CREATED         SIZE       #镜像信息
+        docker images   #   查看镜像
+            REPOSITORY  TAG     IMAGE ID        CREATED         SIZE       #    镜像信息
             wego-admin  latest  91ac202ab8c7    4 hours ago     402MB
 6.创建网络端口映射 mynet
-    docker network create mynet     #创建网络名称 mynet
+    docker network create mynet     #   创建网络名称 mynet
 其他：
     移除网络端口映射 mynet
     docker network rm mynet
@@ -61,6 +61,8 @@
         tar -xvf publish.tar
     9.4 构建镜像(wego-admin-app 空格 . 点也要输入)
         docker build -t wego-admin-app .
+        移除镜像
+        docker rmi wego-admin-app
     9.5 运行容器
         docker run -d --name wego-admin --network mynet -p 5000:5000 wego-admin-app
     9.6 验证容器 /查看日志
@@ -70,14 +72,21 @@
         docker start wego-admin     #  启动容器
         docker restart wego-admin   #  重启容器
         docker stop wego-admin      #  停止容器
+    9.8 查看日志
+        docker exec -u root -it wego-admin cat log/log20250604.log  #   管理员身份查看日志
 其他：
-    9.8 容器被占用或者重名，删除所有未被容器
-        9.8.1停止容器
+    9.9 容器被占用或者重名，删除所有未被容器
+        9.9.1停止容器
             docker stop wego-admin
-        9.8.2移除容器
+        9.9.2移除容器
             docker rm wego-admin
         强制删除容器
             docker rm -f wego-admin
+    9.10 直接进入容器中操作 #!!
+        9.10.1 进入容器
+            docker exec -it sql2022 bash
+        9.10.2 退出容器
+            exit
 10. 永久开启端口(例如开启 TCP 端口 1433、5000)
     firewall-cmd --permanent --add-port=1433/tcp #  添加1433端口
     firewall-cmd --permanent --add-port=5000/tcp #  添加5000端口
@@ -104,7 +113,7 @@
         1.容器中创建目录(如果没有)
             docker exec -it -u 0 sql2022 mkdir -p /opt/mssql/data
         2.检查文件是否存在
-            docker cp /var/www/WEGO_Rehabilitation_Admin.BAK sql2022:/opt/mssql/      #将文件复制到容器中
+            docker cp /var/www/WEGO_Rehabilitation_Admin.BAK sql2022:/opt/mssql/    # 将文件复制到容器
         3.验证是否复制成功
                 docker exec -it sql2022 ls -l /opt/mssql/
     12.4The operating system returned the error '5(Access is denied.)' while attempting 'RestoreContainer::ValidateTargetForCreation' on '/opt/mssql/data/WEGO_Rehabilitation_Admin.mdf'. (3634)

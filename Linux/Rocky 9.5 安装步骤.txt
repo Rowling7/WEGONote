@@ -73,3 +73,8 @@
 		
 		6> REPLACE, stats=5;
 		8> go
+		
+    11.1Cannot open backup device '/var/sqlbak/WEGO_Rehabilitation_Admin.bak'. Operating system error 2(The system cannot find the file specified.). (3201)
+    直接复制文件进容器中：docker cp /var/sqlbak/WEGO_Rehabilitation_Admin.bak sql2022:/opt/mssql/
+        验证是否复制成功:docker exec -it sql2022 ls /opt/mssql/
+            docker cp /var/www/Datafiles/WEGO_Rehabilitation_Admin.bak sql2022:/opt/mssql/

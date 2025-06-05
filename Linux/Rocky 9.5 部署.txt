@@ -42,6 +42,8 @@
         docker images   #   查看镜像
             REPOSITORY  TAG     IMAGE ID        CREATED         SIZE       #    镜像信息
             wego-admin  latest  91ac202ab8c7    4 hours ago     402MB
+    (可选)5.3卸载镜像
+        docker rmi -f wego-admin
 6.创建网络端口映射 mynet
     docker network create mynet     #   创建网络名称 mynet
 其他：
@@ -136,3 +138,8 @@
     14.3重启 Docker 服务
         sudo systemctl restart docker
 
+
+
+
+------------------------------------------达梦部分
+1.密码 buzhidaomima8.

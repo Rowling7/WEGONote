@@ -51,6 +51,10 @@
     docker network rm mynet
 7.启动 SQL Server 容器并映射端口 1433，并挂载数据卷 /var/www/mssql:/var/opt/mssql/data
     docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /var/www/mssql:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2022-latest
+    7.1 启动容器并设置重启策略为 unless-stopped
+    docker update --restart=unless-stopped sql2022  #   启动容器并设置重启策略为 unless-stopped
+    7.2 验证容器重启策略
+    docker inspect --format='{{.Name}} {{.HostConfig.RestartPolicy.Name}}' sql2022
 (可选)8.启动 dotnet 容器并映射端口 80，并挂载数据卷 /var/www/dotnet:/app
     docker run -d --name dotnet8 --network mynet -p 80:80 -v /var/www/dotnet:/app wego-admin-app
 9.构建publish镜像
@@ -67,27 +71,31 @@
         docker rmi wego-admin-app
     9.5 运行容器
         docker run -d --name wego-admin --network mynet -p 5000:5000 wego-admin-app
-    9.6 验证容器 /查看日志
+    9.6 设置重启策略为 unless-stopped
+        docker update --restart=unless-stopped wego-admin #   启动容器并设置重启策略为 unless-stopped
+        9.6.1 验证容器重启策略
+            docker inspect --format='{{.Name}} {{.HostConfig.RestartPolicy.Name}}' wego-admin
+    9.7 验证容器 /查看日志
         docker ps -a                #  查看容器
         docker logs -f wego-admin   #  查看日志
-    9.7 启动容器
+    9.8 启动容器
         docker start wego-admin     #  启动容器
         docker restart wego-admin   #  重启容器
         docker stop wego-admin      #  停止容器
-    9.8 查看日志
+    9.9 查看日志
         docker exec -u root -it wego-admin cat log/log20250604.log  #   管理员身份查看日志
 其他：
-    9.9 容器被占用或者重名，删除所有未被容器
-        9.9.1停止容器
+    9.10 容器被占用或者重名，删除所有未被容器
+        9.10.1停止容器
             docker stop wego-admin
-        9.9.2移除容器
+        9.10.2移除容器
             docker rm wego-admin
         强制删除容器
             docker rm -f wego-admin
-    9.10 直接进入容器中操作 #!!
-        9.10.1 进入容器
+    9.11 直接进入容器中操作 #!!
+        9.11.1 进入容器
             docker exec -it sql2022 bash
-        9.10.2 退出容器
+        9.11.2 退出容器
             exit
 10. 永久开启端口(例如开启 TCP 端口 1433、5000)
     firewall-cmd --permanent --add-port=1433/tcp #  添加1433端口

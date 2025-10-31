@@ -1,0 +1,29 @@
+Rocky Linux 9 忘记密码重置指南
+Rocky Linux 9 忘记密码时，可以通过修改 GRUB 引导参数进入单用户模式或紧急救援模式来重置密码。以下提供两种推荐方法，适用于 root 用户和普通用户密码重置。
+方法一：使用 rd.break 参数（推荐）
+重启系统并进入 GRUB 菜单
+开机或重启时，按下Esc或Shift键显示 GRUB 菜单
+使用箭头键选择要启动的内核（通常是第一个选项）
+按下e键进入编辑模式
+修改内核参数
+在以linux开头的行末尾添加rd.break
+按下Ctrl+X或F10启动修改后的配置
+在紧急 shell 中操作
+bash
+# 重新挂载sysroot为读写模式
+mount -o remount,rw /sysroot
+
+# 切换到系统根目录
+chroot /sysroot
+
+# 重置root密码
+passwd root
+
+# 输入新密码两次确认
+设置 SELinux 重启标记（关键步骤）
+bash
+touch /.autorelabel  # 无论SELinux是否开启，都建议执行
+退出并重启
+bash
+exit
+reboot

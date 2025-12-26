@@ -58,6 +58,39 @@ class WeChatNotifier:
             self.screen_width = temp_root.winfo_screenwidth()
             self.screen_height = temp_root.winfo_screenheight()
             temp_root.destroy()
+    
+    def is_dark_mode_time(self):
+        """判断当前时间是否在暗黑模式时间段（17:00-7:00）"""
+        current_hour = time.localtime().tm_hour
+        # 如果当前小时在17-23或0-6（即17:00-次日7:00），则为暗黑模式时间
+        return current_hour >= 17 or current_hour <= 6
+
+    def get_colors(self):
+        """获取当前时间段的颜色配置"""
+        if self.is_dark_mode_time():
+            # 暗黑模式颜色
+            return {
+                'bg': '#2d2d2d',           # 弹窗背景色
+                'canvas_bg': '#2d2d2d',    # Canvas背景色
+                'text_color': '#ffffff',   # 文字颜色
+                'time_color': '#aaaaaa',   # 时间文字颜色
+                'title_color': '#ffffff',  # 标题文字颜色
+                'content_color': '#cccccc', # 内容文字颜色
+                'border_color': '#555555',  # 边框颜色
+                'icon_bg': '#1e1e1e'       # 图标背景色
+            }
+        else:
+            # 正常模式颜色
+            return {
+                'bg': '#f0f0f0',           # 弹窗背景色
+                'canvas_bg': '#f0f0f0',    # Canvas背景色
+                'text_color': '#000000',   # 文字颜色
+                'time_color': '#808080',   # 时间文字颜色
+                'title_color': '#000000',  # 标题文字颜色
+                'content_color': '#333333', # 内容文字颜色
+                'border_color': '#cccccc',  # 边框颜色
+                'icon_bg': '#2DC100'       # 图标背景色
+            }
 
     def init_database(self):
         """初始化数据库，创建表（如果不存在）"""
@@ -312,6 +345,12 @@ class WeChatNotifier:
 
         return canvas.create_polygon(points, **kwargs, smooth=True)
 
+    def is_night_time(self):
+        """判断当前是否为夜间时间(17:00-7:00)"""
+        current_hour = time.localtime().tm_hour
+        # 如果是17点到23点，或者是0点到7点，都认为是夜间
+        return current_hour >= 17 or current_hour < 7
+
     def create_popup(self, nickname, content, msg_time=None):
         """创建消息弹窗"""
         # 检查是否已存在相同的消息记录（包含时间因素）
@@ -326,6 +365,9 @@ class WeChatNotifier:
             # 保存消息到数据库
             self.save_message_to_db(nickname, content, msg_time)
             return
+
+        # 获取当前颜色配置
+        colors = self.get_colors()
 
         # 如果已经有弹窗存在，先销毁它
         if self.current_popup and self.current_popup.winfo_exists():
@@ -363,24 +405,33 @@ class WeChatNotifier:
             y = 40
             popup.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
-            # 设置窗口背景为白色以支持透明
-            popup.configure(bg='#f0f0f0')  # 使用浅灰色背景
+            # 设置窗口背景为对应颜色
+            popup.configure(bg=colors['bg'])
 
             # 创建Canvas用于绘制圆角矩形
             canvas = tk.Canvas(popup, width=window_width, height=window_height,
-                               highlightthickness=0, bg='#f0f0f0', bd=0)
+                               highlightthickness=0, bg=colors['canvas_bg'], bd=0)
             canvas.place(x=0, y=0)
 
             # 使用PIL绘制带圆角的矩形
             img = Image.new('RGBA', (window_width, window_height), (0, 0, 0, 0))
             draw = ImageDraw.Draw(img)
 
-            # 绘制带圆角的矩形
+            # 绘制带圆角的矩形 - 根据模式选择颜色
+            if self.is_dark_mode_time():
+                # 暗黑模式：深色背景，浅色边框
+                fill_color = '#2d2d2d'
+                outline_color = '#555555'
+            else:
+                # 正常模式：白色背景，浅灰色边框
+                fill_color = 'white'
+                outline_color = '#cccccc'
+
             draw.rounded_rectangle(
                 [(2, 2), (window_width-2, window_height-2)],
                 radius=15,  # 圆角半径
-                fill='white',
-                outline='#cccccc',
+                fill=fill_color,
+                outline=outline_color,
                 width=2
             )
 
@@ -398,34 +449,38 @@ class WeChatNotifier:
                 try:
                     img = Image.open(self.logo_path).resize((40, 40), Image.LANCZOS)
                     logo_img = ImageTk.PhotoImage(img)
-                    logo_label = tk.Label(popup, image=logo_img, bg='white')
+                    logo_label = tk.Label(popup, image=logo_img, bg=fill_color)
                     logo_label.image = logo_img
                     logo_label.place(x=10, y=10)
                 except Exception as e:
                     print(f"加载Logo失败: {e}")
-                    # 使用绿色方块作为替代
-                    icon_label = tk.Label(popup, bg='#2DC100', width=6, height=3)
+                    # 使用颜色块作为替代 - 根据模式选择颜色
+                    icon_label = tk.Label(popup, bg=colors['icon_bg'], width=6, height=3)
                     icon_label.place(x=10, y=10)
             else:
-                # 使用绿色方块作为替代
-                icon_label = tk.Label(popup, bg='#2DC100', width=6, height=3)
+                # 使用颜色块作为替代 - 根据模式选择颜色
+                icon_label = tk.Label(popup, bg=colors['icon_bg'], width=6, height=3)
                 icon_label.place(x=10, y=10)
 
             # 添加"新的消息"文本
-            title_label = tk.Label(popup, text="新的消息", font=("微软雅黑", 10, "bold"), bg='white')
+            title_label = tk.Label(popup, text="新的消息", font=("微软雅黑", 10, "bold"), 
+                                   bg=fill_color, fg=colors['title_color'])
             title_label.place(x=60, y=10)
 
             # 添加时间标签 - 使用从微信获取的时间
             display_time = msg_time if msg_time else time.strftime("%H:%M", time.localtime())
-            time_label = tk.Label(popup, text=display_time, font=("微软雅黑", 8), fg='gray', bg='white')
+            time_label = tk.Label(popup, text=display_time, font=("微软雅黑", 8), 
+                                  fg=colors['time_color'], bg=fill_color)
             time_label.place(x=window_width - 60, y=10)
 
             # 添加昵称标签
-            nickname_label = tk.Label(popup, text=nickname, font=("微软雅黑", 10), bg='white')
+            nickname_label = tk.Label(popup, text=nickname, font=("微软雅黑", 10), 
+                                      bg=fill_color, fg=colors['text_color'])
             nickname_label.place(x=60, y=40)
 
             # 添加消息内容标签
-            content_label = tk.Label(popup, text=content, font=("微软雅黑", 9), bg='white', wraplength=200)
+            content_label = tk.Label(popup, text=content, font=("微软雅黑", 9), 
+                                     bg=fill_color, fg=colors['content_color'], wraplength=200)
             content_label.place(x=60, y=65)
 
             # 设置5秒后自动销毁弹窗
@@ -447,6 +502,7 @@ class WeChatNotifier:
 
             print(f"弹窗已创建并显示在位置: ({x}, {y})，屏幕尺寸: {self.screen_width}x{self.screen_height}")
             print(f"弹窗详细信息: 昵称={nickname}, 内容={content}, 时间={display_time}")
+            print(f"当前模式: {'暗黑模式' if self.is_dark_mode_time() else '正常模式'}")
 
             # 保存消息到数据库
             self.save_message_to_db(nickname, content, msg_time)
@@ -714,6 +770,17 @@ class WeChatNotifier:
         except Exception as e:
             print(f"创建系统托盘图标失败: {e}")
 
+    def main_loop(self):
+        """主循环，定期检查时间变化以更新模式"""
+        while self.running:
+            # 检查当前时间是否跨越了模式边界（7:00或17:00）
+            current_hour = time.localtime().tm_hour
+            # 检查是否在模式切换的边界时间
+            if current_hour == 7 or current_hour == 17:
+                # 短暂休眠以确保时间变化稳定
+                time.sleep(60)  # 等待1分钟以避免重复触发
+            time.sleep(300)  # 每5分钟检查一次
+
 def main():
     notifier = WeChatNotifier()
 
@@ -726,6 +793,8 @@ def main():
 
     # 启动监控
     try:
+        # 在单独线程中运行主循环以检查时间变化
+        threading.Thread(target=notifier.main_loop, daemon=True).start()
         notifier.monitor_wechat()
     except KeyboardInterrupt:
         notifier.stop()

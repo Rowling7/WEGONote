@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据解析工具</title>
+    <script src="./tailwindcss.js"></script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <!-- 添加输入框和解析按钮 -->
+        <div class="mb-8 bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <label class="block text-xl font-semibold text-gray-700">数据类型选择：</label>
+                <div class="flex items-center">
+                    <span class="mr-2 text-gray-700">XML</span>
+                    <button id="toggleBtn" class="mx-2 relative inline-flex h-6 w-11 items-center rounded-full bg-blue-500 transition-colors focus:outline-none">
+                        <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1 toggle-position"></span>
+                    </button>
+                    <span class="ml-2 text-gray-700 font-bold">JSON</span>
+                </div>
+            </div>
+
+            <div id="xmlInputSection">
+                <label class="block text-lg font-medium text-gray-700 mb-2">请输入XML内容：</label>
+                <textarea id="dataInput" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="请在此处粘贴XML内容"></textarea>
+            </div>
+
+            <div id="jsonInputSection" class="hidden">
+                <label class="block text-lg font-medium text-gray-700 mb-2">请输入JSON数据：</label>
+                <textarea id="jsonDataInput" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder='请粘贴JSON格式的数据'></textarea>
+            </div>
+
+            <div class="mt-4 flex space-x-4">
+                <button id="parseDataBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">解析数据</button>
+                <button id="clearDataBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">清空数据</button>
+            </div>
+        </div>
+
+        <div id="resultSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b">
+                    <h2 class="text-xl font-semibold">解析结果</h2>
+                </div>
+                    <div id="resultText" class="whitespace-pre-wrap"></div>
+                    <div id="resultTable" class="hidden">
+                        <div class="overflow-x-auto">
+                            <table id="chargeItemsTable" class="min-w-full divide-y divide-gray-200">
+                                <thead id="tableHeader" class="bg-gray-50">
+                                    <!-- 表头将通过JavaScript动态生成 -->
+                                </thead>
+                                <tbody id="tableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- 数据将通过JavaScript动态加载 -->
+                                </tbody>
+                                <tfoot id="tableFooter" class="bg-gray-50 font-bold">
+                                    <!-- 底部将通过JavaScript动态生成 -->
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div id="opResultSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    序号</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    手术类型</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    手术名称</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    手术代码</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    手术日期</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    开始时间</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    结束时间</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    麻醉方式</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    主刀医生</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    麻醉医生</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="opTableBody">
+                            <!-- 数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 当前模式，false为XML，true为JSON
+        let isJsonMode = false;
+
+        // 获取元素
+        const toggleBtn = document.getElementById('toggleBtn');
+        const xmlInputSection = document.getElementById('xmlInputSection');
+        const jsonInputSection = document.getElementById('jsonInputSection');
+        const dataInput = document.getElementById('dataInput');
+        const jsonDataInput = document.getElementById('jsonDataInput');
+        const parseDataBtn = document.getElementById('parseDataBtn');
+        const clearDataBtn = document.getElementById('clearDataBtn');
+        const resultSection = document.getElementById('resultSection');
+        const opResultSection = document.getElementById('opResultSection');
+
+        // 切换模式
+        toggleBtn.addEventListener('click', function() {
+            isJsonMode = !isJsonMode;
+            updateInputSection();
+            updateToggleVisual();
+        });
+
+        // 更新切换按钮视觉状态
+        function updateToggleVisual() {
+            const span = toggleBtn.querySelector('span');
+            if (isJsonMode) {
+                // JSON模式，按钮向右
+                span.classList.remove('translate-x-1');
+                span.classList.add('translate-x-6');
+                toggleBtn.classList.remove('bg-blue-500');
+                toggleBtn.classList.add('bg-green-500');
+            } else {
+                // XML模式，按钮向左
+                span.classList.remove('translate-x-6');
+                span.classList.add('translate-x-1');
+                toggleBtn.classList.remove('bg-green-500');
+                toggleBtn.classList.add('bg-blue-500');
+            }
+        }
+
+        // 更新输入框显示
+        function updateInputSection() {
+            if (isJsonMode) {
+                xmlInputSection.classList.add('hidden');
+                jsonInputSection.classList.remove('hidden');
+                // 将焦点移到JSON输入框
+                jsonDataInput.focus();
+            } else {
+                jsonInputSection.classList.add('hidden');
+                xmlInputSection.classList.remove('hidden');
+                // 将焦点移到XML输入框
+                dataInput.focus();
+            }
+        }
+
+        // 初始化切换按钮状态
+        updateToggleVisual();
+
+        // 解析数据按钮事件
+        parseDataBtn.addEventListener('click', function() {
+            if (isJsonMode) {
+                parseJsonData();
+            } else {
+                parseXmlData();
+            }
+        });
+
+        // 清空数据按钮事件
+        clearDataBtn.addEventListener('click', function() {
+            dataInput.value = '';
+            jsonDataInput.value = '';
+            resultSection.classList.add('hidden');
+            opResultSection.classList.add('hidden');
+        });
+
+        // 解析XML数据
+        function parseXmlData() {
+            const xmlString = dataInput.value;
+            if (!xmlString.trim()) {
+                resultSection.classList.remove('hidden');
+                document.getElementById('resultText').textContent = '请输入XML内容';
+                document.getElementById('resultTable').classList.add('hidden');
+                opResultSection.classList.add('hidden');
+
+                // 在标题旁添加输入提示
+                const titleElement = document.querySelector('#resultSection .px-6.py-4.bg-gray-50.border-b h2');
+                if (titleElement) {
+                    titleElement.innerHTML = '解析结果 <span class="text-red-600 font-normal">(请输入XML内容)</span>';
+                }
+                return;
+            }
+
+            // 检查是否已包含结束标签，如果没有则尝试添加
+            let processedXmlString = xmlString;
+            if (!processedXmlString.trim().endsWith('</soapenv:Envelope>')) {
+                // 如果没有包含结束标签，则添加
+                processedXmlString = processedXmlString.trim() + '\n</soapenv:Envelope>';
+            }
+
+            try {
+                // 解析XML
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(processedXmlString, "text/xml");
+
+                // 检查解析错误
+                const parseError = xmlDoc.getElementsByTagName('parsererror');
+                if (parseError.length > 0) {
+                    resultSection.classList.remove('hidden');
+                    document.getElementById('resultText').textContent = 'XML解析失败: ' + parseError[0].textContent;
+                    document.getElementById('resultTable').classList.add('hidden');
+                    opResultSection.classList.add('hidden');
+
+                    // 在标题旁添加错误提示
+                    const titleElement = document.querySelector('#resultSection .px-6.py-4.bg-gray-50.border-b h2');
+                    if (titleElement) {
+                        titleElement.innerHTML = '解析结果 <span class="text-red-600 font-normal">(XML解析失败)</span>';
+                    }
+                    return;
+                }
+
+                // 定义命名空间
+                const nsResolver = xmlDoc.createNSResolver(xmlDoc.documentElement);
+
+                // 提取请求头信息
+                const authCodeNode = xmlDoc.evaluate("//weg:message/Request/Header/AuthCode", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                const msgIdNode = xmlDoc.evaluate("//weg:message/Request/Header/MsgId", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                const serviceCodeNode = xmlDoc.evaluate("//weg:message/Request/Header/ServiceCode", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+                const authCode = authCodeNode ? authCodeNode.textContent : '未找到';
+                const msgId = msgIdNode ? msgIdNode.textContent : '未找到';
+                const serviceCode = serviceCodeNode ? serviceCodeNode.textContent : '未找到';
+
+                // 判断是缴费还是退费
+                let transactionType = '未知类型';
+                if (serviceCode === 'COST_DETAIL_BILLING') {
+                    transactionType = '缴费';
+                } else if (serviceCode === 'COST_REFUND_APPLY') {
+                    transactionType = '退费';
+                }
+
+                // 提取患者信息 - 先初始化变量
+                let patientName = '未找到';
+                let identityNum = '未找到';
+                let patientId = '未找到';
+
+                // 在页面上显示基本信息
+                let resultHtml = `<div class="mb-4"><strong>授权码：</strong>${authCode}<br><strong>消息ID：</strong>${msgId}<br><strong>交易类型：</strong>${transactionType}</div>`;
+
+                if (transactionType === '缴费') {
+                    // 提取患者信息
+                    const patientNameNode = xmlDoc.evaluate("//weg:message/Request/Body/PatientInfo/PatientName", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    const identityNumNode = xmlDoc.evaluate("//weg:message/Request/Body/PatientInfo/IdentityNum", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+                    patientName = patientNameNode ? patientNameNode.textContent : '未找到';
+                    identityNum = identityNumNode ? identityNumNode.textContent : '未找到';
+
+                    resultHtml += `<div class="mb-4"><strong>患者姓名：</strong>${patientName}<br><strong>身份证：</strong>${identityNum}</div>`;
+
+                    // 提取收费项目
+                    const chargeItems = xmlDoc.evaluate("//weg:message/Request/Body/ChargeItemList/ChargeItem", xmlDoc, nsResolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+
+                    let totalFee = 0.0;
+                    const tableBody = document.getElementById('tableBody');
+                    const tableHeader = document.getElementById('tableHeader');
+                    const tableFooter = document.getElementById('tableFooter');
+
+                    // 设置表头
+                    tableHeader.innerHTML = `
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">序号</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">收费项目名称</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">金额（元）</th>
+                        </tr>
+                    `;
+
+                    tableBody.innerHTML = ''; // 清空之前的表格内容
+
+                    for (let i = 0; i < chargeItems.snapshotLength; i++) {
+                        const item = chargeItems.snapshotItem(i);
+
+                        const feeItemNameNode = item.querySelector('FeeItemName');
+                        const totalPriceNode = item.querySelector('TotalPrice');
+
+                        const itemName = feeItemNameNode ? feeItemNameNode.textContent : '未找到';
+                        const price = totalPriceNode ? parseFloat(totalPriceNode.textContent) : 0.0;
+
+                        // 添加到表格
+                        const row = document.createElement('tr');
+                        row.className = 'hover:bg-gray-50';
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${i + 1}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${price.toFixed(2)}</td>
+                        `;
+                        tableBody.appendChild(row);
+
+                        totalFee += price;
+                    }
+
+                    // 设置表尾
+                    tableFooter.innerHTML = `
+                        <tr class="bg-gray-50 font-bold">
+                            <td class="py-2 px-4 border-b" colspan="2">总费用</td>
+                            <td class="py-2 px-4 border-b">${totalFee.toFixed(2)}元</td>
+                        </tr>
+                    `;
+
+                    // 显示表格
+                    document.getElementById('resultText').classList.add('hidden');
+                    document.getElementById('resultTable').classList.remove('hidden');
+                } else if (transactionType === '退费') {
+                    // 提取患者信息
+                    const patientNameNode = xmlDoc.evaluate("//weg:message/Request/Body/ChargeState/PatientName", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    const patientIdNode = xmlDoc.evaluate("//weg:message/Request/Body/ChargeState/PatientId", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+                    patientName = patientNameNode ? patientNameNode.textContent : '未找到';
+                    patientId = patientIdNode ? patientIdNode.textContent : '未找到';
+
+                    resultHtml += `<div class="mb-4"><strong>患者姓名：</strong>${patientName}<br><strong>患者ID：</strong>${patientId}</div>`;
+
+                    // 提取退费项目
+                    const refundItems = xmlDoc.evaluate("//weg:message/Request/Body/ChargeState/ItemList/Item", xmlDoc, nsResolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+
+                    let totalRefund = 0.0;
+                    const tableBody = document.getElementById('tableBody');
+                    const tableHeader = document.getElementById('tableHeader');
+                    const tableFooter = document.getElementById('tableFooter');
+
+                    // 设置表头
+                    tableHeader.innerHTML = `
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">序号</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">退费项目名称</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">金额（元）</th>
+                        </tr>
+                    `;
+
+                    tableBody.innerHTML = ''; // 清空之前的表格内容
+
+                    for (let i = 0; i < refundItems.snapshotLength; i++) {
+                        const item = refundItems.snapshotItem(i);
+
+                        const feeItemNameNode = item.querySelector('FeeItemName');
+                        const totalPriceNode = item.querySelector('TotalPrice');
+
+                        const itemName = feeItemNameNode ? feeItemNameNode.textContent : '未找到';
+                        const price = totalPriceNode ? parseFloat(totalPriceNode.textContent) : 0.0;
+
+                        // 添加到表格
+                        const row = document.createElement('tr');
+                        row.className = 'hover:bg-gray-50';
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${i + 1}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${price.toFixed(2)}</td>
+                        `;
+                        tableBody.appendChild(row);
+
+                        totalRefund += price;
+                    }
+
+                    // 设置表尾
+                    tableFooter.innerHTML = `
+                        <tr class="bg-gray-50 font-bold">
+                            <td class="py-2 px-4 border-b" colspan="2">总退费</td>
+                            <td class="py-2 px-4 border-b">${totalRefund.toFixed(2)}元</td>
+                        </tr>
+                    `;
+
+                    // 显示表格
+                    document.getElementById('resultText').classList.add('hidden');
+                    document.getElementById('resultTable').classList.remove('hidden');
+                }
+
+                // 显示结果
+                document.getElementById('resultText').innerHTML = resultHtml;
+                resultSection.classList.remove('hidden');
+                opResultSection.classList.add('hidden');
+
+                // 在标题旁添加解析成功的提示
+                const titleElement = document.querySelector('#resultSection .px-6.py-4.bg-gray-50.border-b h2');
+                if (titleElement) {
+                    titleElement.innerHTML = '解析结果 <span class="text-green-600 font-normal">(解析成功)</span>';
+                }
+
+                // 添加体检者基本信息显示区域
+                if (transactionType === '缴费' || transactionType === '退费') {
+                    // 创建基本信息显示区域
+                    let basicInfoHtml = '<div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">';
+                    basicInfoHtml += '<h3 class="text-lg font-semibold text-blue-800 mb-3">体检者基本信息</h3>';
+                    basicInfoHtml += '<div class="grid grid-cols-1 md:grid-cols-2 gap-2">';
+
+                    // 添加基本信息
+                    basicInfoHtml += `<div class="mb-2"><span class="font-medium text-gray-700">患者姓名：</span><span class="text-gray-900">${patientName}</span></div>`;
+                    basicInfoHtml += `<div class="mb-2"><span class="font-medium text-gray-700">身份证号：</span><span class="text-gray-900">${identityNum || patientId}</span></div>`;
+                    basicInfoHtml += `<div class="mb-2"><span class="font-medium text-gray-700">授权码：</span><span class="text-gray-900">${authCode}</span></div>`;
+                    basicInfoHtml += `<div class="mb-2"><span class="font-medium text-gray-700">消息ID：</span><span class="text-gray-900">${msgId}</span></div>`;
+                    basicInfoHtml += `<div class="mb-2"><span class="font-medium text-gray-700">服务代码：</span><span class="text-gray-900">${serviceCode}</span></div>`;
+                    basicInfoHtml += `<div class="mb-2"><span class="font-medium text-gray-700">交易类型：</span><span class="text-gray-900">${transactionType}</span></div>`;
+
+                    basicInfoHtml += '</div></div>';
+
+                    // 将基本信息插入到resultText的开始部分
+                    document.getElementById('resultText').innerHTML = basicInfoHtml + resultHtml;
+                }
+            } catch (error) {
+                resultSection.classList.remove('hidden');
+                document.getElementById('resultText').textContent = '解析XML时出错: ' + error.message;
+                document.getElementById('resultTable').classList.add('hidden');
+                opResultSection.classList.add('hidden');
+
+                // 在标题旁添加错误提示
+                const titleElement = document.querySelector('#resultSection .px-6.py-4.bg-gray-50.border-b h2');
+                if (titleElement) {
+                    titleElement.innerHTML = '解析结果 <span class="text-red-600 font-normal">(XML解析失败)</span>';
+                }
+            }
+        }
+
+        // 解析JSON数据
+        function parseJsonData() {
+            const inputText = jsonDataInput.value.trim();
+            if (!inputText) {
+                resultSection.classList.remove('hidden');
+                document.getElementById('resultText').textContent = '请输入JSON数据';
+                document.getElementById('resultTable').classList.add('hidden');
+                opResultSection.classList.add('hidden');
+
+                // 在标题旁添加输入提示
+                const titleElement = document.querySelector('#resultSection .px-6.py-4.bg-gray-50.border-b h2');
+                if (titleElement) {
+                    titleElement.innerHTML = '解析结果 <span class="text-red-600 font-normal">(请输入JSON数据)</span>';
+                }
+                return;
+            }
+
+            try {
+                const data = JSON.parse(inputText);
+                if (!Array.isArray(data)) {
+                    throw new Error('数据格式不正确，应为数组格式');
+                }
+                parseAndDisplayOpData(data);
+            } catch (error) {
+                console.error('JSON解析错误:', error);
+                document.getElementById('resultText').textContent = 'JSON数据解析失败: ' + error.message;
+                document.getElementById('resultTable').classList.add('hidden');
+                resultSection.classList.remove('hidden');
+                opResultSection.classList.add('hidden');
+
+                // 在标题旁添加错误提示
+                const titleElement = document.querySelector('#resultSection .px-6.py-4.bg-gray-50.border-b h2');
+                if (titleElement) {
+                    titleElement.innerHTML = '解析结果 <span class="text-red-600 font-normal">(JSON解析失败)</span>';
+                }
+            }
+        }
+
+        // 解析和显示手术数据
+        function parseAndDisplayOpData(data) {
+            const tableBody = document.getElementById('opTableBody');
+
+            // 格式化日期时间显示为 YYYY-MM-DD HH:mm:ss
+            const formatDateTime = (dateString) => {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            };
+
+            // 按手术代码和手术日期排序
+            data.sort((a, b) => {
+                // 首先按手术代码排序
+                if (a.oprn_oprt_code < b.oprn_oprt_code) return -1;
+                if (a.oprn_oprt_code > b.oprn_oprt_code) return 1;
+
+                // 如果手术代码相同，则按手术日期排序
+                const dateA = new Date(a.oprn_oprt_date);
+                const dateB = new Date(b.oprn_oprt_date);
+
+                return dateA - dateB;
+            });
+
+            // 分组数据以便识别相同手术代码和时间的情况
+            const groupedByCode = {};
+            data.forEach(op => {
+                if (!groupedByCode[op.oprn_oprt_code]) {
+                    groupedByCode[op.oprn_oprt_code] = [];
+                }
+                groupedByCode[op.oprn_oprt_code].push(op);
+            });
+
+            // 定义多种颜色类用于区分不同的重复组
+            const colorClasses = [
+                'text-red-600',
+                'text-blue-600',
+                'text-green-600',
+                'text-purple-600',
+                'text-yellow-600',
+                'text-pink-600',
+                'text-indigo-600',
+                'text-teal-600'
+            ];
+
+            // 标记相同时间的手术并分配颜色
+            let colorIndex = 0;
+            for (const code in groupedByCode) {
+                const ops = groupedByCode[code];
+                if (ops.length > 1) {
+                    // 对同一手术代码的记录按时间分组
+                    const timeGroups = {};
+                    ops.forEach(op => {
+                        const timeKey = op.oprn_oprt_date;
+                        if (!timeGroups[timeKey]) {
+                            timeGroups[timeKey] = [];
+                        }
+                        timeGroups[timeKey].push(op);
+                    });
+
+                    // 标记相同时间的记录并分配颜色
+                    for (const timeKey in timeGroups) {
+                        const sameTimeOps = timeGroups[timeKey];
+                        if (sameTimeOps.length > 1) {
+                            const colorClass = colorClasses[colorIndex % colorClasses.length];
+                            sameTimeOps.forEach(op => {
+                                op.sameTimeGroup = true;
+                                op.colorClass = colorClass;
+                            });
+                            colorIndex++;
+                        }
+                    }
+                }
+            }
+
+            // 清空表格
+            tableBody.innerHTML = '';
+
+            data.forEach(op => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50';
+
+                // 根据是否为相同时间组设置样式
+                const dateClass = op.sameTimeGroup ?
+                    `px-6 py-4 whitespace-nowrap text-sm font-bold ${op.colorClass}` :
+                    'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${op.Sort}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                            ${op.oprn_oprt_type === '1' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">
+                            ${op.oprn_oprt_type === '1' ? '主手术' : '次要手术'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${op.oprn_oprt_name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">${op.oprn_oprt_code}</td>
+                    <td class="${dateClass}">${formatDateTime(op.oprn_oprt_date)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatDateTime(op.oprn_oprt_begn_date)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatDateTime(op.oprn_oprt_end_date)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${op.anst_way}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <div>${op.oper_dr_name}</div>
+                        <div class="text-gray-500 text-xs">${op.oper_dr_code}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <div>${op.anst_dr_name}</div>
+                        <div class="text-gray-500 text-xs">${op.anst_dr_code}</div>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+
+            opResultSection.classList.remove('hidden');
+            resultSection.classList.add('hidden');
+
+            // 检查opResultSection是否已有标题，如果没有则添加
+            let headerDiv = opResultSection.querySelector('.px-6.py-4.bg-gray-50.border-b');
+            if (!headerDiv) {
+                // 创建标题部分
+                headerDiv = document.createElement('div');
+                headerDiv.className = 'px-6 py-4 bg-gray-50 border-b';
+                headerDiv.innerHTML = '<h2 class="text-xl font-semibold">解析结果 <span class="text-green-600 font-normal">(解析成功)</span></h2>';
+                opResultSection.insertBefore(headerDiv, opResultSection.firstChild);
+            } else {
+                // 如果已有标题，更新其内容
+                const titleElement = headerDiv.querySelector('h2');
+                if (titleElement) {
+                    titleElement.innerHTML = '解析结果 <span class="text-green-600 font-normal">(解析成功)</span>';
+                }
+            }
+        }
+
+        // 页面加载时聚焦到输入框
+        window.onload = function() {
+            document.getElementById('dataInput').focus();
+        };
+    </script>
+</body>
+
+</html>

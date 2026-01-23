@@ -49,8 +49,8 @@
 其他：
     移除网络端口映射 mynet
     docker network rm mynet
-7.启动 SQL Server 容器并映射端口 1433，并挂载数据卷 /var/www/mssql:/var/opt/mssql/data
-    docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 -v /var/www/mssql:/var/opt/mssql/data mcr.microsoft.com/mssql/server:2022-latest
+7.启动 SQL Server 容器并映射端口 1433，（暂时不要挂载数据卷 /var/www/mssql:/var/opt/mssql/data）
+    docker run -d --name sql2022 --network mynet -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=password81!" -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
     7.1 启动容器并设置重启策略为 unless-stopped
     docker update --restart=unless-stopped sql2022  #   启动容器并设置重启策略为 unless-stopped
     7.2 验证容器重启策略
